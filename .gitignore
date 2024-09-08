@@ -1,0 +1,37 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+# Build Folders (you can exclude bin and obj folders)
+bin/
+obj/
+
+# User-specific files
+*.user
+*.suo
+*.csproj.user
+
+# Logs
+*.log
+
+# Secrets
+.secrets/
+
+# Node.js modules
+node_modules/
+
+# ASP.NET Core specific
+appsettings.Development.json
+
+# Visual Studio
+.vs/
+
+# Build output
+build/
+
+# Rider IDE
+.idea/
+
+# Other
+*.db
+*.sqlite
