@@ -1,0 +1,51 @@
+﻿@model Disaster_Management_system.Models.UserModels.LocationViewModel
+
+@{
+    ViewData["Title"] = "Create Location";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label asp-for="Tole" class="control-label"></label>
+        <input asp-for="Tole" class="form-control" />
+        <span asp-validation-for="Tole" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Province" class="control-label"></label>
+        <input asp-for="Province" class="form-control" />
+        <span asp-validation-for="Province" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="District" class="control-label"></label>
+        <input asp-for="District" class="form-control" />
+        <span asp-validation-for="District" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Municipality" class="control-label"></label>
+        <input asp-for="Municipality" class="form-control" />
+        <span asp-validation-for="Municipality" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Ward" class="control-label"></label>
+        <input asp-for="Ward" class="form-control" />
+        <span asp-validation-for="Ward" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="VictimId" class="control-label"></label>
+        <input asp-for="VictimId" class="form-control" />
+        <span asp-validation-for="VictimId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <input type="submit" value="Create" class="btn btn-primary" />
+    </div>
+</form>
+
+

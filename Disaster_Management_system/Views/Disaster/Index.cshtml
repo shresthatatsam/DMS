@@ -1,0 +1,78 @@
+﻿@model Disaster_Management_system.Models.UserModels.DisasterViewModel
+
+@{
+    ViewData["Title"] = "Create Disaster";
+    var disasters = ViewBag.DisasterList;
+}
+
+<h1>Create Disaster</h1>
+
+<form asp-action="Create" method="post">
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        <label asp-for="Category" class="control-label"></label>
+        <select id="disasterDropdown" name="Category" class="form-control">
+            <option value="">Select a disaster</option>
+            @foreach (var disaster in disasters)
+            {
+                <option value="@disaster.Id">@disaster.Name</option>
+            }
+        </select>
+        <span asp-validation-for="Category" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Severity" class="control-label"></label>
+        <input asp-for="Severity" id="Severity" class="form-control" />
+        <span asp-validation-for="Severity" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Date_Occured" class="control-label"></label>
+        <input asp-for="Date_Occured" type="date" class="form-control" />
+        <span asp-validation-for="Date_Occured" class="text-danger"></span>
+    </div>
+
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Create</button>
+    </div>
+</form>
+
+<div>
+</div>
+
+
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#disasterDropdown').change(function () {
+                var selectedId = $(this).val();
+                console.log(selectedId); 
+                if (selectedId) {
+                    $.ajax({
+                        url: '@Url.Action("getDisasterCategoryByName", "Disaster")', 
+                        type: 'GET',
+                        data: { id: selectedId },
+                        success: function (data) {
+                            console.log(data);
+                            // Update the form fields with the data returned
+                            $('#Severity').val(data[0].severity);
+                            $('#')
+                        },
+                        error: function (xhr, status, error) {
+                            // Handle errors here
+                            console.log('Error:', error);
+                        }
+                    });
+                } else {
+                    // Clear form fields if no selection
+                    $('#Severity').val('');
+                }
+            });
+        });
+    </script>
+}
