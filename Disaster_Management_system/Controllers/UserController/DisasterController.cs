@@ -20,9 +20,18 @@ namespace Disaster_Management_system.Controllers.UserController
 
         public IActionResult Index()
         {
-            ViewBag.disasterList = _disasterCategory.getAllDisasters();
-            return View();
+            var disasterList = _disasterCategory.getAllDisasters();
+            ViewBag.DisasterList = disasterList;
+            return View(disasterList);
+            //ViewBag.disasterList = _disasterCategory.getAllDisasters();
+            //return View();
         }
+
+        //public async Task<IViewComponentResult> InvokeAsync()
+        //{
+        //    var disasters = await _disasterCategory.getAllDisastersAsync(); // Use async if applicable
+        //    return View(disasters);
+        //}
 
         [HttpGet]
         public IActionResult getDisasterCategoryByName(Guid id)

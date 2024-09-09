@@ -20,7 +20,6 @@ namespace Disaster_Management_system.Controllers.UserController
         }
        
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(LocationViewModel model)
         {
             var userIdString = HttpContext.Session.GetString("VictimId");

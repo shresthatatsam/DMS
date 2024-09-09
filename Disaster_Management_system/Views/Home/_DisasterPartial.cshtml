@@ -1,0 +1,7 @@
+﻿@model IEnumerable<Disaster_Management_system.Models.AdminModels.DisasterCategoryViewModel>
+<select>
+    @foreach (var disaster in Model)
+    {
+        <option value="@disaster.Id">@disaster.Name</option>
+    }
+</select>

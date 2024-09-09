@@ -6,46 +6,75 @@
 
 <h1>@ViewData["Title"]</h1>
 
-<form asp-action="Create" method="post">
+<form id="location-form" asp-action="Create" method="post">
     <div class="form-group">
-        <label asp-for="Tole" class="control-label"></label>
-        <input asp-for="Tole" class="form-control" />
+        <label for="Tole" class="control-label">Tole</label>
+        <input id="Tole" asp-for="Tole" class="form-control" />
         <span asp-validation-for="Tole" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-        <label asp-for="Province" class="control-label"></label>
-        <input asp-for="Province" class="form-control" />
+        <label for="Province" class="control-label">Province</label>
+        <input id="Province" asp-for="Province" class="form-control" />
         <span asp-validation-for="Province" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-        <label asp-for="District" class="control-label"></label>
-        <input asp-for="District" class="form-control" />
+        <label for="District" class="control-label">District</label>
+        <input id="District" asp-for="District" class="form-control" />
         <span asp-validation-for="District" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-        <label asp-for="Municipality" class="control-label"></label>
-        <input asp-for="Municipality" class="form-control" />
+        <label for="Municipality" class="control-label">Municipality</label>
+        <input id="Municipality" asp-for="Municipality" class="form-control" />
         <span asp-validation-for="Municipality" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-        <label asp-for="Ward" class="control-label"></label>
-        <input asp-for="Ward" class="form-control" />
+        <label for="Ward" class="control-label">Ward</label>
+        <input id="Ward" asp-for="Ward" class="form-control" />
         <span asp-validation-for="Ward" class="text-danger"></span>
     </div>
 
-    <div class="form-group">
-        <label asp-for="VictimId" class="control-label"></label>
-        <input asp-for="VictimId" class="form-control" />
-        <span asp-validation-for="VictimId" class="text-danger"></span>
-    </div>
 
     <div class="form-group">
-        <input type="submit" value="Create" class="btn btn-primary" />
+        <button type="button" class="btn btn-primary" id="location_button">Create</button>
     </div>
 </form>
 
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#location_button').on('click', function () {
+            // Gather form data by ID
+            var data = {
+                Tole: $('#Tole').val(),
+                Province: $('#Province').val(),
+                District: $('#District').val(),
+                Municipality: $('#Municipality').val(),
+                Ward: $('#Ward').val(),
+            };
 
+            // URL to the LocationController Create action
+            var url = '@Url.Action("Create", "Location")';
+
+            // Make the AJAX request
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: data,
+                success: function (response) {
+                    // Handle success
+                    alert('Location created successfully!');
+                    // Optionally, switch tabs or redirect
+                    $('#myTab a[href="#Disaster"]').tab('show'); // Example tab switch
+                },
+                error: function (xhr) {
+                    // Handle errors
+                    alert('An error occurred. Please try again.');
+                }
+            });
+        });
+    });
+</script>
