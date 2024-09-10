@@ -6,16 +6,12 @@
 
 <h1>Create Disaster</h1>
 
-<form asp-action="Create" method="post">
-    @Html.AntiForgeryToken()
+<form id="Disaster-form" asp-action="Create" method="post">
+   
 
     <div class="form-group">
-        <label asp-for="Category" class="control-label"></label>
-        <div id="disasterDropdownContainer">
-            <!-- Dropdown will be loaded here by AJAX -->
-            <button type="button" id="loadDropdown" class="btn btn-secondary">Load Dropdown</button>
-        </div>
-        <span asp-validation-for="Category" class="text-danger"></span>
+
+        <input asp-for="Category" id="Category" class="form-control" />
     </div>
 
     <div class="form-group">
@@ -26,36 +22,55 @@
 
     <div class="form-group">
         <label asp-for="Date_Occured" class="control-label"></label>
-        <input asp-for="Date_Occured" type="date" class="form-control" />
+        <input asp-for="Date_Occured" id="Date_Occured" type="date" class="form-control" />
         <span asp-validation-for="Date_Occured" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-        <button type="submit" class="btn btn-primary">Create</button>
+        <button type="button" class="btn btn-primary" id="Disaster_button">Create</button>
     </div>
 </form>
 
 <div>
 </div>
 
-@section Scripts {
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
-            $("document").on("click" ,"#loadDropdown" , function () {
-                $.ajax({
-                    url: '@Url.Action("GetDisasterDropdownOptions", "Disaster")',
-                    type: 'GET',
-                    success: function (data) {
-                        $('#disasterDropdownContainer').html(data);
-                    },
-                    error: function (xhr, status, error) {
-                        console.log('Error:', error);
-                    }
-                });
+
+        $('#Disaster_button').on('click', function () {
+            // Gather form data by ID
+            var data = {
+                Category: $('#Category').val(),
+                Severity: $('#Severity ').val(),
+                Date_Occured: $('#Date_Occured').val(),
+            };
+
+            // URL to the LocationController Create action
+            var url = '@Url.Action("Create", "Disaster")';
+
+            // Make the AJAX request
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: data,
+                success: function (response) {
+                    // Handle success
+                    alert('Location created successfully!');
+                    // Optionally, switch tabs or redirect
+                    $('#myTab a[href="#Image"]').tab('show'); // Example tab switch
+                },
+                error: function (xhr) {
+                    // Handle errors
+                    alert('An error occurred. Please try again.');
+                }
             });
+        });
+      
 
             $(document).on('change', '#disasterDropdown', function () {
+                alert("tet");
                 var selectedId = $(this).val();
                 console.log(selectedId); 
                 if (selectedId) {
@@ -79,4 +94,4 @@
             });
         });
     </script>
-}
+

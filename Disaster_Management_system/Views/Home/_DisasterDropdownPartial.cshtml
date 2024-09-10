@@ -1,9 +1,0 @@
-﻿@model IEnumerable<Disaster_Management_system.Models.AdminModels.DisasterCategoryViewModel>
-
-<select id="disasterDropdown" name="Category" class="form-control">
-    <option value="">Select a disaster</option>
-    @foreach (var disaster in Model)
-    {
-        <option value="@disaster.Id">@disaster.Name</option>
-    }
-</select>
