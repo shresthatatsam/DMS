@@ -1,8 +1,66 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bootstrap Tabbed Form</title>
+	<!-- Bootstrap CSS -->
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .tab-content {
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .nav-tabs .nav-link.active {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .nav-link {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <form id="tab-form">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="personal-tab" data-toggle="tab" href="#personal" role="tab" aria-controls="personal" aria-selected="true">Personal Info</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="location-tab" data-toggle="tab" href="#location" role="tab" aria-controls="contact" aria-selected="false">Location</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="Disaster-tab" data-toggle="tab" href="#Disaster" role="tab" aria-controls="review" aria-selected="false">Disaster</a>
+                </li>
+            </ul>
+            <div class="tab-content mt-3" id="myTabContent">
+                <!-- Personal Info Tab -->
+                <div class="tab-pane fade show active" id="victim" role="tabpanel" aria-labelledby="personal-tab">
+                    @await Html.PartialAsync("../Victim/Index")
+
+                </div>
+
+                <!-- Contact Info Tab -->
+                <div class="tab-pane fade" id="location" role="tabpanel" aria-labelledby="location-tab">
+                    @await Html.PartialAsync("../Location/Index")
+                </div>
+
+                <!-- Review Tab -->
+                <div class="tab-pane fade" id="Disaster" role="tabpanel" aria-labelledby="Disaster-tab">
+                    @await Html.PartialAsync("../Disaster/Index")
+                </div>
+            </div>
+           
+        </form>
+    </div>
+
+  
+</body>
+</html>
