@@ -20,7 +20,7 @@
 </head>
 <body>
     <div class="container mt-4">
-        <form id="dynamicForm" action="/Home/SubmitForm" method="post" enctype="multipart/form-data">
+        <form id="image-form" asp-action="Create" method="post" enctype="multipart/form-data">
             <div id="dynamicFields">
                 <div class="form-group" id="form-group-1">
                     <label for="photos-1">Photos</label>
@@ -35,6 +35,8 @@
                 </div>
             </div>
             <button type="button" class="btn btn-primary" id="addButton">Add</button>
+
+            <button type="button" class="btn btn-primary" id="submit_Image">submit</button>
         </form>
     </div>
 
@@ -91,6 +93,43 @@
             $('#photos-1').on('change', function () {
                 displayImagePreview(this.files, $('#imagePreview-1'));
             });
+
+            $('#submitImage').on('click', function () {
+                let photoData = [];
+
+                // Collect Base64 strings from hidden textareas
+                $('.base64Container textarea').each(function () {
+                    photoData.push($(this).val());
+                });
+
+                const data = {
+                   
+                    PhotosBase64: photoData
+                };
+
+                // URL to the DisasterController Create action
+                const url = '@Url.Action("Create", "Disaster")';
+
+                // Make the AJAX request
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(data),
+                    success: function (response) {
+                        if (response.success) {
+                            alert('Image uploaded successfully!');
+                        } else {
+                            alert('An error occurred. Please try again.');
+                        }
+                    },
+                    error: function (xhr) {
+                        alert('An error occurred. Please try again.');
+                    }
+                });
+            });
+
+
         });
     </script>
 </body>
