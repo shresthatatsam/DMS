@@ -30,6 +30,7 @@ namespace Disaster_Management_system.Controllers.UserController
                 Age = model.Age,
                 Gender = model.Gender,
                 ContactNumber = model.ContactNumber,
+                Password = model.Password,
                 Status = true,
               
             };
