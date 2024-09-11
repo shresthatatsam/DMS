@@ -1,5 +1,136 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Form Groups</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .image-preview {
+            max-width: 20%;
+            height: auto;
+            margin-top: 0px;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="container mt-4">
+        <form id="image-form" asp-action="Create" method="post" enctype="multipart/form-data">
+            <div id="dynamicFields">
+                <div class="form-group" id="form-group-1">
+                    <label for="photos-1">Photos</label>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <input type="file" class="form-control-file" id="photos-1" name="Photos[]" multiple>
+                        </div>
+                        <div class="col-md-6">
+                            <div id="imagePreview-1"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button type="button" class="btn btn-primary" id="addButton">Add</button>
+
+            <button type="button" class="btn btn-primary" id="submit_Image">submit</button>
+        </form>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            let formCounter = 1;
+
+            // Function to create a new form-group
+            function createFormGroup(counter) {
+                return `
+                            <div class="form-group" id="form-group-${counter}">
+                                <label for="photos-${counter}">Photo</label>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <input type="file" class="form-control-file" id="photos-${counter}" name="Photos[]" multiple>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div id="imagePreview-${counter}" class="mt-2"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+            }
+
+            // Function to display image previews
+            function displayImagePreview(files, previewContainer) {
+                previewContainer.empty(); // Clear previous previews
+                $.each(files, function (_, file) {
+                    if (file && file.type.startsWith('image/')) {
+                        const reader = new FileReader();
+                        reader.onload = function (e) {
+                            $('<img>')
+                                .attr('src', e.target.result)
+                                .addClass('image-preview')
+                                .appendTo(previewContainer);
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
+            }
+
+            // Add new form group on button click
+            $('#addButton').on('click', function () {
+                formCounter++;
+                $('#dynamicFields').append(createFormGroup(formCounter));
+
+                // Add event listener for new file input
+                $(`#photos-${formCounter}`).on('change', function () {
+                    displayImagePreview(this.files, $(`#imagePreview-${formCounter}`));
+                });
+            });
+
+            // Initial file input event listener
+            $('#photos-1').on('change', function () {
+                displayImagePreview(this.files, $('#imagePreview-1'));
+            });
+
+            $('#submitImage').on('click', function () {
+                let photoData = [];
+
+                // Collect Base64 strings from hidden textareas
+                $('.base64Container textarea').each(function () {
+                    photoData.push($(this).val());
+                });
+
+                const data = {
+                   
+                    PhotosBase64: photoData
+                };
+
+                // URL to the DisasterController Create action
+                const url = '@Url.Action("Create", "Disaster")';
+
+                // Make the AJAX request
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(data),
+                    success: function (response) {
+                        if (response.success) {
+                            alert('Image uploaded successfully!');
+                        } else {
+                            alert('An error occurred. Please try again.');
+                        }
+                    },
+                    error: function (xhr) {
+                        alert('An error occurred. Please try again.');
+                    }
+                });
+            });
+
+
+        });
+    </script>
+</body>
+</html>

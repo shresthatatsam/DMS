@@ -22,28 +22,17 @@ namespace Disaster_Management_system.Controllers.UserController
         public IActionResult Index()
         {
             //var disasterList = _disasterCategory.getAllDisasters();
-            //ViewBag.DisasterList = disasterList;
             return View();
-            //ViewBag.disasterList = _disasterCategory.getAllDisasters();
-            //return View();
+           
         }
 
-        [HttpGet]
-        public IActionResult GetDisasterDropdownOptions()
-        {
-            var disasterList = _disasterCategory.getAllDisasters();
+        //[HttpGet]
+        //public IActionResult GetDisasterDropdownOptions()
+        //{
+        //    var disasterList = _disasterCategory.getAllDisasters();
 
-            // Convert to view model if necessary
-            var viewModelList = disasterList.Select(d => new DisasterCategoryViewModel
-            {
-                Name = d.Name,
-                Id = d.Id,
-                Severity = d.Severity
-            }).ToList();
-
-            // Return the partial view with the list as the model
-            return PartialView("_DisasterDropdownPartial", viewModelList);
-        }
+        //    return View("Index" , disasterList);
+        //}
 
         [HttpGet]
         public IActionResult getDisasterCategoryByName(Guid id)

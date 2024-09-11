@@ -39,6 +39,10 @@
                 <li class="nav-item">
                     <a class="nav-link" id="Disaster-tab" data-toggle="tab" href="#Disaster" role="tab" aria-controls="review" aria-selected="false">Disaster</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="Image-tab" data-toggle="tab" href="#Image" role="tab" aria-controls="Image" aria-selected="false">Image</a>
+                </li>
+                
             </ul>
             <div class="tab-content mt-3" id="myTabContent">
                 <!-- Personal Info Tab -->
@@ -55,6 +59,10 @@
                 <!-- Review Tab -->
                 <div class="tab-pane fade" id="Disaster" role="tabpanel" aria-labelledby="Disaster-tab">
                     @await Html.PartialAsync("../Disaster/Index")
+                </div>
+
+                <div class="tab-pane fade" id="Image" role="tabpanel" aria-labelledby="Image-tab">
+                    @await Html.PartialAsync("../Image/Index")
                 </div>
             </div>
            

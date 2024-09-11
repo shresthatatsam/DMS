@@ -1,4 +1,6 @@
-﻿namespace Disaster_Management_system.Models.UserModels
+﻿using Disaster_Management_system.Models.AdminModels;
+
+namespace Disaster_Management_system.Models.UserModels
 {
     public class DisasterViewModel
     {
