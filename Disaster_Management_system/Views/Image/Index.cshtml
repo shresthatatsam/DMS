@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dynamic Form Groups</title>
+    <title>Image Upload Form</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         .form-group {
@@ -11,40 +11,58 @@
         }
 
         .image-preview {
-            max-width: 20%;
+            max-width: 100px;
             height: auto;
-            margin-top: 0px;
+            margin-top: 0;
         }
+
+        .image-preview-container {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+            .image-preview-container img {
+                margin: 5px;
+            }
     </style>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
     <div class="container mt-4">
-        <form id="image-form" asp-action="Create" method="post" enctype="multipart/form-data">
+        <h2>Upload Images</h2>
+        <form id="image-form" method="post" enctype="multipart/form-data">
             <div id="dynamicFields">
+                <!-- Initial form group -->
                 <div class="form-group" id="form-group-1">
                     <label for="photos-1">Photos</label>
                     <div class="row">
                         <div class="col-md-6">
-                            <input type="file" class="form-control-file" id="photos-1" name="Photos[]" multiple>
+                            <input type="file" class="form-control-file" id="photos-1" name="Photos" multiple>
+
                         </div>
                         <div class="col-md-6">
-                            <div id="imagePreview-1"></div>
+                            <div id="imagePreview-1" class="image-preview-container"></div>
                         </div>
                     </div>
                 </div>
             </div>
-            <button type="button" class="btn btn-primary" id="addButton">Add</button>
-
-            <button type="button" class="btn btn-primary" id="submit_Image">submit</button>
+            <div class="form-group">
+                <label for="description">Description</label>
+                <input type="text" id="description" name="Description" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="victimId">Victim ID</label>
+                <input type="text" id="victimId" name="VictimId" class="form-control">
+            </div>
+            <button type="button" class="btn btn-primary" id="addButton">Add More</button>
+            <button type="button" class="btn btn-primary" id="submit_Image">Submit</button>
         </form>
     </div>
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function () {
             let formCounter = 1;
 
-            // Function to create a new form-group
             function createFormGroup(counter) {
                 return `
                             <div class="form-group" id="form-group-${counter}">
@@ -54,16 +72,15 @@
                                         <input type="file" class="form-control-file" id="photos-${counter}" name="Photos[]" multiple>
                                     </div>
                                     <div class="col-md-6">
-                                        <div id="imagePreview-${counter}" class="mt-2"></div>
+                                        <div id="imagePreview-${counter}" class="image-preview-container"></div>
                                     </div>
                                 </div>
                             </div>
                         `;
             }
 
-            // Function to display image previews
             function displayImagePreview(files, previewContainer) {
-                previewContainer.empty(); // Clear previous previews
+                previewContainer.empty();
                 $.each(files, function (_, file) {
                     if (file && file.type.startsWith('image/')) {
                         const reader = new FileReader();
@@ -78,47 +95,47 @@
                 });
             }
 
-            // Add new form group on button click
             $('#addButton').on('click', function () {
                 formCounter++;
                 $('#dynamicFields').append(createFormGroup(formCounter));
-
-                // Add event listener for new file input
                 $(`#photos-${formCounter}`).on('change', function () {
                     displayImagePreview(this.files, $(`#imagePreview-${formCounter}`));
                 });
             });
 
-            // Initial file input event listener
-            $('#photos-1').on('change', function () {
-                displayImagePreview(this.files, $('#imagePreview-1'));
+            $('#dynamicFields').on('change', 'input[type="file"]', function () {
+                const id = $(this).attr('id').split('-')[1];
+                displayImagePreview(this.files, $(`#imagePreview-${id}`));
             });
 
-            $('#submitImage').on('click', function () {
-                let photoData = [];
+            $('#submit_Image').on('click', function () {
+                const formData = new FormData();
 
-                // Collect Base64 strings from hidden textareas
-                $('.base64Container textarea').each(function () {
-                    photoData.push($(this).val());
+                // Collect files from all file inputs
+                $('input[type="file"]').each(function () {
+                    const files = this.files;
+                    $.each(files, function (_, file) {
+                        formData.append('Photos', file); // 'Photos' should match the model property name
+                    });
                 });
 
-                const data = {
-                   
-                    PhotosBase64: photoData
-                };
+                // Add other form fields to the FormData object
+                formData.append('Description', $('#description').val());
+                formData.append('Date', new Date().toISOString());
+                formData.append('VictimId', $('#victimId').val() || '');
 
-                // URL to the DisasterController Create action
-                const url = '@Url.Action("Create", "Disaster")';
+                // URL to the server API
+                const url = '/Image/Create'; // Adjust the URL accordingly
 
-                // Make the AJAX request
                 $.ajax({
                     url: url,
                     type: 'POST',
-                    contentType: 'application/json',
-                    data: JSON.stringify(data),
+                    data: formData,
+                    processData: false, // Prevent jQuery from automatically processing the data
+                    contentType: false, // Prevent jQuery from automatically setting the content type
                     success: function (response) {
                         if (response.success) {
-                            alert('Image uploaded successfully!');
+                            alert('Images uploaded successfully!');
                         } else {
                             alert('An error occurred. Please try again.');
                         }
@@ -128,7 +145,6 @@
                     }
                 });
             });
-
 
         });
     </script>

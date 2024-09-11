@@ -6,7 +6,6 @@
         public string Description { get; set; }
         public DateTime Date { get; set; }
         public string Url { get; set; }
-     
 
         // Foreign keys
         public Guid VictimId { get; set; }

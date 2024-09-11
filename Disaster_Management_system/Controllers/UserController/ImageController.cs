@@ -1,58 +1,72 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Disaster_Management;
+using Disaster_Management_system.Models.UserModels;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Disaster_Management_system.Controllers.UserController
 {
     public class ImageController : Controller
     {
+        private readonly ApplicationDbContext _context;
+
+        public ImageController(ApplicationDbContext context)
+        {
+            _context = context;
+        }
         public IActionResult Index()
         {
             return View();
         }
 
+        public class PhotoUploadViewModel
+        {
+            public string Description { get; set; }
+            public DateTime Date { get; set; }
+            public string VictimId { get; set; }
+            public List<IFormFile> Photos { get; set; }
+        }
 
-        //[HttpPost]
-        //public IActionResult Create([FromBody] PhotoUploadViewModel model)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        // Process each Base64 encoded image
-        //        if (model.PhotosBase64 != null && model.PhotosBase64.Any())
-        //        {
-        //            foreach (var base64 in model.PhotosBase64)
-        //            {
-        //                var base64Data = base64.Split(',')[1];
-        //                var fileName = Guid.NewGuid() + ".png"; // Generate a unique file name
-        //                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", fileName);
+        [HttpPost]
+        public IActionResult Create([FromForm] PhotoUploadViewModel model)
+        {
+            var userIdString = HttpContext.Session.GetString("VictimId");
 
-        //                // Convert Base64 string to byte array
-        //                byte[] imageBytes = Convert.FromBase64String(base64Data);
+            if (!Guid.TryParse(userIdString, out var userId))
+            {
+                userId = Guid.Empty;
+            }
 
-        //                // Save the image file
-        //                System.IO.File.WriteAllBytes(filePath, imageBytes);
+            // Process each file in the Photos collection
+            foreach (var photo in model.Photos)
+            {
+                if (photo != null && photo.Length > 0)
+                {
+                    // Optionally, process the file (e.g., save to disk or cloud storage)
+                    using (var memoryStream = new MemoryStream())
+                    {
+                       photo.CopyToAsync(memoryStream);
+                        var photoData = new PhotosViewModel
+                        {
+                            Description = model.Description,
+                            Date = model.Date,
+                            Url = Convert.ToBase64String(memoryStream.ToArray()),
+                            VictimId = userId
+                        };
 
-        //                // Prepare the JSON data
-        //                var photoData = new
-        //                {
-        //                    Description = model.Description,
-        //                    Date = model.Date,
-        //                    Url = $"/images/{fileName}",
-        //                    VictimId = model.VictimId
-        //                };
+                        _context.Photos.Add(photoData);
+                        _context.SaveChangesAsync();
+                    }
+                }
+            }
 
-        //                var jsonData = JsonConvert.SerializeObject(photoData);
+            return Json(new { success = true });
+        }
 
-        //                // Save JSON data to a file (for example, in wwwroot/json or any other location)
-        //                var jsonFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/json/photoData.json");
 
-        //                System.IO.File.AppendAllText(jsonFilePath, jsonData + Environment.NewLine);
-        //            }
-        //        }
 
-        //        return Json(new { success = true });
-        //    }
-
-        //    return Json(new { success = false });
-        //}
+       
     }
 
 }
