@@ -17,6 +17,7 @@ option.UseSqlServer(
     )));
 
 builder.Services.AddScoped<IDisasterCategory, DisasterCategory>();
+builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromMinutes(30);
@@ -46,6 +47,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Account}/{action=Login}/{id?}");
 
 app.Run();
