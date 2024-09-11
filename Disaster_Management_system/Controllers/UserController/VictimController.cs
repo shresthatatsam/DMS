@@ -30,7 +30,7 @@ namespace Disaster_Management_system.Controllers.UserController
                 Age = model.Age,
                 Gender = model.Gender,
                 ContactNumber = model.ContactNumber,
-                Password = model.Password,
+                //Password = model.Password,
                 Status = true,
               
             };
@@ -42,5 +42,38 @@ namespace Disaster_Management_system.Controllers.UserController
 
             return RedirectToAction("Index", "Location");
         }
+
+        //[HttpGet]
+        //public async Task<IActionResult> getallData()
+        //{
+        //    var userIdString = HttpContext.Session.GetString("VictimId");
+
+        //    Guid userId;
+        //    if (Guid.TryParse(userIdString, out userId))
+        //    {
+        //        ViewBag.UserId = userId;
+        //    }
+        //    else
+        //    {
+        //        ViewBag.UserId = Guid.Empty;
+        //    }
+
+        //   var data= _context.Victims.Where(x => x.Id == userId).FirstOrDefault();
+        //    return Json(new
+        //    {
+        //        success = true,
+        //        data = new
+        //        {
+        //            data.Id,
+        //            data.Name,
+        //            data.Age,
+        //            data.Gender,
+        //            data.ContactNumber
+        //        }
+        //    });
+
+        //}
+
+
     }
 }

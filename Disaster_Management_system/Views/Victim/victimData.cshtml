@@ -6,7 +6,6 @@
 
 <h1 class="mb-4">Create Victim</h1>
 
-<form id="victim-form" asp-action="Create" method="post">
     <div class="form-group">
         <label for="Name" class="form-label">Name</label>
         <input id="Name" name="Name" class="form-control" />
@@ -36,13 +35,39 @@
         </div>
     </div>
     <div class="form-group mt-4">
-        <button type="button" class="btn btn-primary" id="victim_button">Next</button>
+        <button type="button" class="btn btn-primary" id="victim_buttons">Next</button>
     </div>
-</form>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script>
     $(document).ready(function () {
-        $('#victim_button').on('click', function () {
+
+        $.ajax({
+            url: '@Url.Action("getallData", "Victim")',
+            type: 'GET',
+            success: function (response) {
+                if (response.success) {
+                    // Handle success and populate data
+                    console.log('User Data:', response.data);
+
+                    // Example: Populate form fields with user data
+                    $('#Name').val(response.data.Name);
+                    $('#Age').val(response.data.Age);
+                    $('#Gender').val(response.data.Gender);
+                    $('#ContactNumber').val(response.data.ContactNumber);
+                } else {
+                    // Handle error
+                    alert(response.message);
+                }
+            },
+            error: function (xhr) {
+                // Handle AJAX error
+                alert('An error occurred while retrieving user data. Please try again.');
+            }
+        });
+
+
+
+        $('#victim_buttons').on('click', function () {
             // Gather form data by ID
             var data = {
                 Name: $('#Name').val(),

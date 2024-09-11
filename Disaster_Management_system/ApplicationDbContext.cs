@@ -51,7 +51,7 @@ namespace Disaster_Management
                 entity.Property(e => e.Gender).IsRequired();
                 entity.Property(e => e.ContactNumber).IsRequired();
                 entity.Property(e => e.Status).IsRequired();
-                entity.Property(e => e.Password).IsRequired();
+                //entity.Property(e => e.Password).IsRequired();
             });
 
             modelBuilder.Entity<DisasterViewModel>(entity =>
